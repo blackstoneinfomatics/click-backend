@@ -1,0 +1,5 @@
+export enum AuthPlatform {
+  RIDER_APP = 'RIDER_APP',
+  DRIVER_APP = 'DRIVER_APP',
+  SUPER_ADMIN_WEB = 'SUPER_ADMIN_WEB',
+}

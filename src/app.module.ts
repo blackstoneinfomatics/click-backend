@@ -17,16 +17,18 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { RatingsModule } from './modules/ratings/ratings.module';
 import { SupportModule } from './modules/support/support.module';
 import { AdminModule } from './modules/admin/admin.module';
-import { ConfigModule } from 'node_modules/@nestjs/config/dist/config.module';
+import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { validationSchema } from './config/validation.schema';
 import { PrismaModule } from './infrastructure/database/prisma.module';
 import { RedisModule } from './infrastructure/redis/redis.module';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { HealthModule } from './health/health.module';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { SessionGuard } from './modules/auth/guards/session.guard';
 
 @Module({
   imports: [
@@ -75,6 +77,14 @@ import { HealthModule } from './health/health.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: SessionGuard,
     },
     AppService,
   ],
